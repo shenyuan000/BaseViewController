@@ -59,9 +59,12 @@ typedef NS_ENUM(NSUInteger, FitViewType){
 /**适配带导航和不带导航*/
 - (void)fitView:(FitViewType)fitViewType
 {
+    //自动调整Insets关闭
+    self.automaticallyAdjustsScrollViewInsets = NO;
     if (fitViewType == FitViewTypeDefault) {
         //有导航栏且导航栏没有隐藏
-        if (self.navigationController && self.navigationController.isNavigationBarHidden == NO ) {
+        if (self.navigationController
+            && self.navigationController.isNavigationBarHidden == NO ) {
             //导航条不透明
             if (self.navigationController.navigationBar.translucent == NO) {
                 _viewToTop = 64; //从导航条下面开始计算
@@ -83,7 +86,9 @@ typedef NS_ENUM(NSUInteger, FitViewType){
                 _viewToBottom = 49;
             }
             //判断当前容器是导航控控制器且工具条存在
-        }else if (self.navigationController && self.navigationController.isToolbarHidden == NO && self.navigationController.tabBarController == nil){
+        }else if (self.navigationController
+                  && self.navigationController.isToolbarHidden == NO
+                  && self.navigationController.tabBarController == nil){
             _viewToBottom = 44;
             //判断当前根容器是tabBarController
         }else if (self.navigationController && self.navigationController.tabBarController){
@@ -96,24 +101,70 @@ typedef NS_ENUM(NSUInteger, FitViewType){
         }else{
             _viewToBottom = 0;
         }
+     //第二种适配方法
     }else{
         //判断当前容器
-        if (self.navigationController && self.navigationController.isNavigationBarHidden == NO) {
-        
-
+        if (self.navigationController
+            && self.navigationController.isNavigationBarHidden == NO
+            && self.navigationController.toolbarHidden
+            && self.navigationController.tabBarController == nil) {
             
+            if (self.navigationController.navigationBar.translucent == NO) {
+                self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight;
+                //不扩展不透明的bar
+                self.extendedLayoutIncludesOpaqueBars = NO;
+                _viewToTop = 0;
+            }else
+            {
+                self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeTop;
+                self.extendedLayoutIncludesOpaqueBars = YES;
+                _viewToTop = 20;
+            }
+            _viewToBottom = 0;
+        }else if (self.navigationController
+                  && self.navigationController.isNavigationBarHidden == NO
+                  && self.navigationController.toolbarHidden == NO
+                  && self.navigationController.tabBarController == nil){
+            self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeTop;
+            _viewToTop = 20;
+            _viewToBottom = 0;
+        }else if (self.navigationController){
+        
+        
+        
+        
+        
         }
-    
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
