@@ -56,46 +56,46 @@ typedef NS_ENUM(NSUInteger, FitViewType){
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-/**适配带导航和不带导航*/
+/**适配带导航和不带导航--带tabbar和不带tarbar的*/
 - (void)fitView:(FitViewType)fitViewType
-{
+{   //填充适配条件
+    [self fitCondition];
     //自动调整Insets关闭
     self.automaticallyAdjustsScrollViewInsets = NO;
     //*****************************第一种方法******************************//
     if (fitViewType == FitViewTypeDefault) {
-        //判断当前的容器为导航控制器
+        //当前的容器为导航控制器
         if (self.navigationController && self.navigationController.tabBarController == nil) {
-            //导航条隐藏了 或者导航条透明
+            _viewToBottom = 0;
+            //导航条隐藏
             if (self.navigationController.isNavigationBarHidden) {
                 _viewToTop = 20;
-                _viewToBottom = 49;
-                
+            //导航条显示
             }else{
-                if (self.navigationController.navigationBarHidden == NO) {
-                    //导航条透明
-                    if (self.navigationController.navigationBar.translucent) {
-                        _viewToTop = 20;
-                        _viewToBottom = 0;
-                    }else{
-                        _viewToTop = 64;
-                        _viewToBottom = 0;
-                    }
+                //导航条透明
+                if (self.navigationController.navigationBar.translucent) {
+                    _viewToTop = 20;
+                //导航条不透明
+                }else{
+                    _viewToTop = 64;
                 }
             }
-            //当前的容器是tabbar控制器
+        //当前的容器是tabBar控制器
         }else if (self.navigationController == nil && self.tabBarController){
             _viewToTop = 20;
-            //tabar隐藏
-            if (self.hidesBottomBarWhenPushed) {
+            //tabBar隐藏
+            if (self.tabBarController.tabBar.isHidden) {
                 _viewToBottom = 0;
+            //tabBar显示
             }else{
-                _viewToTop = 49;
+                _viewToBottom = 49;
             }
-            //当前的的容器根视图控制器是tabBar的控制器
+        //当前容器的容器是tabBar的控制器
         }else if (self.navigationController && self.navigationController.tabBarController){
             
-            //导航条存在 tabbar存在
-            if (self.navigationController.isNavigationBarHidden == NO && self.navigationController.tabBarController.tabBar.isHidden == NO) {
+            //导航条显示 tabBar显示
+            if (self.navigationController.isNavigationBarHidden == NO
+                && self.navigationController.tabBarController.tabBar.isHidden == NO) {
                 _viewToBottom =  49;
                 //导航条透明
                 if (self.navigationController.navigationBar.translucent) {
@@ -103,29 +103,31 @@ typedef NS_ENUM(NSUInteger, FitViewType){
                 }else{
                     _viewToTop = 64;
                 }
-                //导航条不存在 tarBar不存在
-            }else if (self.navigationController.isNavigationBarHidden && self.navigationController.tabBarController.tabBar.isHidden){
+            //导航条隐藏 tarBar隐藏
+            }else if (self.navigationController.isNavigationBarHidden
+                      && self.navigationController.tabBarController.tabBar.isHidden){
                 
                 _viewToTop = 20;
                 _viewToBottom = 0;
                 
-                //导航条存在 tarBar 不存在
-            }else if (self.navigationController.isNavigationBarHidden == NO && (self.tabBarController.tabBar.isHidden || self.hidesBottomBarWhenPushed)){
-                //导航条透明
-                if (self.navigationController.navigationBar.translucent) {
-                    _viewToTop = 20;
-                }else{
-                    _viewToTop = 0;
-                }
-                _viewToBottom = 0;
-                //导航条不存在 tabbar 存在
-            }else{
-                
-                _viewToTop = 20;
-                _viewToBottom = 49;
-            }
-            
-            //当前没有容器
+            //导航条显示 tarBar隐藏
+            }else if (self.navigationController.isNavigationBarHidden == NO
+                      && (self.tabBarController.tabBar.isHidden
+                          || self.hidesBottomBarWhenPushed)){
+                          //导航条透明
+                          if (self.navigationController.navigationBar.translucent) {
+                              _viewToTop = 20;
+                          }else{
+                              _viewToTop = 64;
+                          }
+                          _viewToBottom = 0;
+                          //导航条隐藏 tabBar显示
+                      }else{
+                          
+                          _viewToTop = 20;
+                          _viewToBottom = 49;
+                      }
+        //当前没有容器
         }else{
             _viewToTop =  20;
             _viewToBottom = 0;
@@ -133,90 +135,102 @@ typedef NS_ENUM(NSUInteger, FitViewType){
         //*****************************第二种方法******************************//
     }else{
         
-        //判断当前的容器导航控制器
+         _viewToBottom = 0;
+        //1当前的容器是导航控制器
         if (self.navigationController && self.navigationController.tabBarController == nil) {
             
-            //导航条隐藏了或者导航条是透明的
-            if (self.navigationController.navigationBarHidden ||self.navigationController.navigationBar.translucent ) {
+            //导航条隐藏
+            if (self.navigationController.navigationBarHidden) {
                 self.edgesForExtendedLayout = UIRectEdgeAll;
                 self.extendedLayoutIncludesOpaqueBars = YES;
                 _viewToTop =  20;
-                _viewToBottom = 0;
-                //导航条没有隐藏或者不是透明的
+
+            //导航条没有隐藏
             }else{
-                self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight |  UIRectEdgeBottom;
-                _viewToTop = 0;
-                _viewToBottom = 0;
-                
+                //导航条透明
+                if (self.navigationController.navigationBar.translucent) {
+                    self.edgesForExtendedLayout = UIRectEdgeAll;
+                    self.extendedLayoutIncludesOpaqueBars = YES;
+                    _viewToTop = 20;
+                //导航条不透明
+                }else{
+                    self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight |  UIRectEdgeBottom;
+                    self.extendedLayoutIncludesOpaqueBars = NO;
+                    _viewToTop = 0;
+                }
             }
-            
-            //当前的根视图是tarBar
+        //2当前容器的容器是TabBarController
         }else if (self.navigationController && self.navigationController.tabBarController){
             
-            //导航条存在 tabBar存在
-            if (self.navigationController.navigationBarHidden == NO
-                && self.navigationController.tabBarController.tabBar.hidden == NO) {
-                //导航条是否透明
-                if (self.navigationController.navigationBar.translucent == YES) {
+            //*****************************start******************************//
+            //1）导航条显示 tabBar显示
+            if (self.navigationController.isNavigationBarHidden == NO
+                && self.navigationController.tabBarController.tabBar.isHidden == NO) {
+                //导航条透明
+                if (self.navigationController.navigationBar.translucent) {
                     self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight |UIRectEdgeTop;
                     self.extendedLayoutIncludesOpaqueBars = YES;
                     _viewToTop = 20;
-                    _viewToBottom = 0;
                 }else{
                     self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight ;
                     self.extendedLayoutIncludesOpaqueBars = NO;
                     _viewToTop = 0;
-                    _viewToBottom = 0;
-                    
                 }
-                //导航条存在 tabbar不存在
+            //2）导航条显示 tabBar隐藏
             }else if (self.navigationController.isNavigationBarHidden == NO
-                      && (self.navigationController.tabBarController.tabBar.hidden  || self.hidesBottomBarWhenPushed)){
-                
-                //导航条是否透明
-                if (self.navigationController.navigationBar.translucent == YES) {
-                    self.edgesForExtendedLayout = UIRectEdgeAll;
-                    self.extendedLayoutIncludesOpaqueBars = YES;
-                    _viewToTop = 20;
-                    _viewToBottom = 0;
-                }else{
-                    self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeBottom;
-                    self.extendedLayoutIncludesOpaqueBars = NO;
-                    _viewToTop = 0;
-                    _viewToTop = 0;
-                }
-                //导航条不存在 tabbar存在
-            }else if (self.navigationController.isNavigationBarHidden && self.navigationController.tabBarController.tabBar.hidden == NO && self.hidesBottomBarWhenPushed == NO){
-                
-                self.edgesForExtendedLayout = UIRectEdgeBottom | UIRectEdgeLeft | UIRectEdgeRight;
-                _viewToTop = 20;
-                _viewToBottom = 0;
-                //导航条不存在 tabar 也不存在
+                      && (self.navigationController.tabBarController.tabBar.hidden
+                          || self.hidesBottomBarWhenPushed)){
+                          
+                          //导航条透明
+                          if (self.navigationController.navigationBar.translucent) {
+                              self.edgesForExtendedLayout = UIRectEdgeAll;
+                              self.extendedLayoutIncludesOpaqueBars = YES;
+                              _viewToTop = 20;
+                          //导航条不透明
+                          }else{
+                              self.edgesForExtendedLayout = UIRectEdgeLeft | UIRectEdgeRight | UIRectEdgeBottom;
+                              self.extendedLayoutIncludesOpaqueBars = NO;
+                              _viewToTop = 0;
+                          }
+            //3）导航条隐藏 tabBar显示
+            }else if (self.navigationController.isNavigationBarHidden
+                                && (self.navigationController.tabBarController.tabBar.isHidden == NO
+                                    || self.hidesBottomBarWhenPushed == NO)){
+                                    self.edgesForExtendedLayout = UIRectEdgeTop | UIRectEdgeLeft | UIRectEdgeRight;
+                                    self.extendedLayoutIncludesOpaqueBars= YES;
+                                    _viewToTop = 20;
+            //4）导航条隐藏 taBar隐藏
             }else{
-                
                 self.edgesForExtendedLayout = UIRectEdgeAll;
                 _viewToTop = 20;
-                _viewToBottom = 0;
             }
+            //*****************************end******************************//
             
-            //当前的视图控制器是tarbar
+        //3当前的容器tarBarController
         }else if (self.navigationController == nil && self.tabBarController){
-            if (self.tabBarController.tabBar.hidden ) {
+            //tabBar隐藏
+            if (self.tabBarController.tabBar.isHidden ) {
                 self.edgesForExtendedLayout = UIRectEdgeAll;
+            //tabBar显示
             }else{
                 self.edgesForExtendedLayout = UIRectEdgeRight | UIRectEdgeLeft | UIRectEdgeTop;
             }
             _viewToTop = 20;
-            _viewToBottom = 0;
-            //没有容器
+        //4没有容器
         }else{
             self.edgesForExtendedLayout = UIRectEdgeAll;
             self.extendedLayoutIncludesOpaqueBars = YES;
             _viewToTop = 20;
-            _viewToBottom = 0;
         }
     }
 }
+#pragma mark - 适配条件 留个接口子类继承重写
+- (void)fitCondition
+{
+
+}
+
+
 /*
  #pragma mark - Navigation
  
