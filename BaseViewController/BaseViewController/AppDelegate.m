@@ -14,9 +14,9 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [self startNetListen];
     return YES;
 }
 
@@ -42,4 +42,10 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+-(void)startNetListen
+{
+    self.reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
+    //开起监听
+    [_reach startNotifier];
+}
 @end
