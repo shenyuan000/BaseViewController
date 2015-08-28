@@ -8,13 +8,6 @@
 
 #import "BaseViewController.h"
 
-/**
- * 屏幕适配的两种方法
- */
-typedef NS_ENUM(NSUInteger, FitViewType){
-    FitViewTypeDefault = 0,
-    FitViewTypeEdgesExtended,
-};
 @interface BaseViewController ()
 
 @end
