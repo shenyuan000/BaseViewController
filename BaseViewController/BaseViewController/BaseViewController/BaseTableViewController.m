@@ -29,6 +29,7 @@
     [self.view addSubview:self.tableView];
     self.isOpenHeaderRefresh = YES;
     self.isOpenFooterRefresh = YES;
+    [self showPromptTextUIWithPromptText:@"加载失败" title:nil andDuration:3];
     // Do any additional setup after loading the view, typically from a nib.
 }
 //视图将要出现

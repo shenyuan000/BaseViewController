@@ -61,7 +61,8 @@ typedef NS_ENUM(NSUInteger,NetWorkLoadType) {
  *  @param PromptText 提示的文本
  *  @param interval   多长时间以后自动隐藏
  */
-- (void)showPromptTextUIWithPromptText:(NSString*)PromptText
+- (void)showPromptTextUIWithPromptText:(NSString *)PromptText
+                                 title:(NSString*)title
                            andDuration:(NSTimeInterval)interval;
 /**
  *  显示警告框

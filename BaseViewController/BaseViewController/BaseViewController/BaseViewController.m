@@ -9,7 +9,7 @@
 #import "BaseViewController.h"
 #import "Reachability.h"
 #import "AppDelegate.h"
-
+#import "UIView+Toast.h"
 
 @implementation NetWorkLoadIngView
 @end
@@ -298,8 +298,17 @@
     }
 }
 - (void)showPromptTextUIWithPromptText:(NSString *)PromptText
+                                 title:(NSString*)title
                            andDuration:(NSTimeInterval)interval
 {
+   
+    if (interval == 0) {
+        interval = 3;
+    }
+    [self.view makeToast:PromptText
+                duration:interval
+                position:CSToastPositionBottom
+                   title:title];
 
 }
 - (void)showAlertViewWithMessage:(NSString *)message
