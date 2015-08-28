@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, FitViewType){
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-/**适配带导航和不带导航--带tabbar和不带tarbar的*/
+/**适配带导航和不带导航--带tabBar和不带tarbar的 self.view的布局*/
 - (void)fitView:(FitViewType)fitViewType
 {   //填充适配条件
     [self fitCondition];

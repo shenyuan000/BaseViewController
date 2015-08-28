@@ -15,6 +15,7 @@
 		28C909A21B8F1DAE00DBAE64 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28C909A01B8F1DAE00DBAE64 /* LaunchScreen.xib */; };
 		28C909AE1B8F1DAE00DBAE64 /* BaseViewControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C909AD1B8F1DAE00DBAE64 /* BaseViewControllerTests.m */; };
 		28C909B91B8F1DC900DBAE64 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C909B81B8F1DC900DBAE64 /* BaseViewController.m */; };
+		28C909BC1B900EF300DBAE64 /* BaseTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C909BB1B900EF300DBAE64 /* BaseTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		28C909AD1B8F1DAE00DBAE64 /* BaseViewControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BaseViewControllerTests.m; sourceTree = "<group>"; };
 		28C909B71B8F1DC900DBAE64 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
 		28C909B81B8F1DC900DBAE64 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		28C909BA1B900EF300DBAE64 /* BaseTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewController.h; sourceTree = "<group>"; };
+		28C909BB1B900EF300DBAE64 /* BaseTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				28C909991B8F1DAE00DBAE64 /* ViewController.m */,
 				28C909B71B8F1DC900DBAE64 /* BaseViewController.h */,
 				28C909B81B8F1DC900DBAE64 /* BaseViewController.m */,
+				28C909BA1B900EF300DBAE64 /* BaseTableViewController.h */,
+				28C909BB1B900EF300DBAE64 /* BaseTableViewController.m */,
 				28C9099B1B8F1DAE00DBAE64 /* Main.storyboard */,
 				28C9099E1B8F1DAE00DBAE64 /* Images.xcassets */,
 				28C909A01B8F1DAE00DBAE64 /* LaunchScreen.xib */,
@@ -228,6 +233,7 @@
 				28C909B91B8F1DC900DBAE64 /* BaseViewController.m in Sources */,
 				28C909971B8F1DAE00DBAE64 /* AppDelegate.m in Sources */,
 				28C909941B8F1DAE00DBAE64 /* main.m in Sources */,
+				28C909BC1B900EF300DBAE64 /* BaseTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
