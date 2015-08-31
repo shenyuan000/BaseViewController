@@ -7,7 +7,6 @@
 //
 
 #import "BaseTableViewController.h"
-#import "MJRefresh.h"
 #define WS(weakSelf)  __weak __typeof(&*self)weakSelf = self;
 @interface BaseTableViewController ()
 
@@ -15,6 +14,7 @@
 
 @implementation BaseTableViewController
 @synthesize tableView = _tableView;
+@synthesize dataArray = _dataArray;
 #pragma mark - lifecycle
 //加载视图
 - (void)loadView
@@ -27,15 +27,12 @@
     [super viewDidLoad];
     //添加tableView
     [self.view addSubview:self.tableView];
-    self.isOpenHeaderRefresh = YES;
-    self.isOpenFooterRefresh = YES;
-    [self showPromptTextUIWithPromptText:@"加载失败" title:nil andDuration:3];
     // Do any additional setup after loading the view, typically from a nib.
 }
 //视图将要出现
 - (void)viewWillAppear:(BOOL)animated
 {
-    self.isOpenNetListen = YES;
+
 }
 //视图已经出现
 - (void)viewDidAppear:(BOOL)animated
@@ -44,7 +41,7 @@
 //视图将要消失
 - (void)viewWillDisappear:(BOOL)animated
 {
-    self.isOpenNetListen = NO;
+
 }
 //视图已经消失
 - (void)viewDidDisappear:(BOOL)animated
@@ -58,7 +55,6 @@
 }
 - (void)fitCondition
 {
-
    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"wwdc15.jpg"] forBarMetrics:UIBarMetricsDefault];
 }
 
@@ -68,8 +64,8 @@
         _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0,self.viewToTop,self.view.frame.size.width ,self.view.frame.size.height - self.viewToBottom - self.viewToTop ) style:UITableViewStylePlain];
         self.tableView.delegate = self;
         self.tableView.dataSource = self;
-        _tableView.backgroundColor = [UIColor yellowColor];
-        
+        //去掉下面没有数据呈现的cell
+        self.tableView.tableFooterView = [[UIView alloc]init];
     }
     return _tableView;
 }
@@ -80,12 +76,12 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return 20;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 40;
+    return 50;
 }
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -94,11 +90,13 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
     }
+    cell.textLabel.text = [NSString stringWithFormat:@"测试数据-%02ld",(long)indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     
 }
 - (NSMutableArray *)dataArray
@@ -135,25 +133,15 @@
 #pragma mark - 头部刷新and脚部刷新
 - (void)headerRefresh
 {
-    //TODO: 头部刷新回调 子类需要重写
-    //时间队列，规定时间执行某个事件
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格;
-        [self.tableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [self.tableView.header endRefreshing];
-    });
+  
 }
 - (void)footerRefresh
 {
-    //TODO: 脚部刷新回调 子类需要重写
-    //时间队列，规定时间执行某个事件
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        // 刷新表格;
-        [self.tableView reloadData];
-        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
-        [self.tableView.footer endRefreshing];
-    });
 }
 
+#pragma mark - 网络不可用点击打开设置页面
+- (void)goNetNotUse:(UIButton *)sender
+{
+    [super goNetNotUse:sender];
+}
 @end

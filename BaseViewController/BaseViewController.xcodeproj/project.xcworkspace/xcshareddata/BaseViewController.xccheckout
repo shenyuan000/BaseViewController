@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>2551F9FD-5DA3-4CF3-BDAF-A99B803F7072</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>BaseViewController</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>68C76CC07B99128F2EE5A8FADFC0C9675D4A5FE7</key>
 		<string>https://github.com/denmanboy/BaseViewController.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>BaseViewController/BaseViewController.xcodeproj/project.xcworkspace</string>
+	<string>BaseViewController/BaseViewController.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>68C76CC07B99128F2EE5A8FADFC0C9675D4A5FE7</key>

@@ -47,5 +47,10 @@
     self.reach = [Reachability reachabilityWithHostName:@"www.baidu.com"];
     //开起监听
     [_reach startNotifier];
+    
 }
+
+
+
+
 @end
