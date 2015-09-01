@@ -59,7 +59,12 @@ typedef NS_ENUM(NSUInteger, FitViewType){
 @property (nonatomic, assign,readonly) BOOL netIsUse;
 /**适配条件 留个接口子类继承重写*/
 - (void)fitCondition;//填充适配的条件eg:导航条是否隐藏,导航条是否透明 tabBar是否隐藏
+
 //*****************************网络加载UI******************************//
+/**
+ *  显示默认的网络加载
+ */
+- (void)showLoadingUI;
 /**
  *  显示网络加载UI
  *
@@ -79,6 +84,8 @@ typedef NS_ENUM(NSUInteger, FitViewType){
  *  @param PromptText 提示的文本
  *  @param interval   多长时间以后自动隐藏
  */
+
+//*****************************页面文本提示******************************//
 - (void)showPromptTextUIWithPromptText:(NSString *)promptText
                                  title:(NSString*)title
                            andDuration:(NSTimeInterval)interval;
@@ -92,7 +99,8 @@ typedef NS_ENUM(NSUInteger, FitViewType){
 - (void)showAlertViewWithMessage:(NSString*)message
                         andTitle:(NSString*)title
                      andDelegate:(id<UIAlertViewDelegate>)delegate;
-//*****************************网络监听UI-监听网络变化 在ViewWillAppear开启 在viewWillDisAppear在关闭*****************************//
+
+//***网络监听UI-监听网络变化 在ViewWillAppear开启 在viewWillDisAppear在关闭**//
 /**是否监听网络变化*/
 @property (nonatomic, assign) BOOL isOpenNetListen;
 /**

@@ -14,8 +14,6 @@
 /**
  *  定制网络加载UI
  */
-
-
 @implementation NetWorkLoadIngView
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -28,7 +26,7 @@
 };
 - (void)netLoadIngType:(NetWorkLoadType)netWorkLoadType andImageAnimation:(NSArray *)imageAnimationArray
          andPromptText:(NSString *)promptText
-{      self.hidden = NO;
+{   self.hidden = NO;
     self.alpha = 1;
     //相同类型 直接返回
     if (self.netWorkLoadType  == netWorkLoadType) {
@@ -50,8 +48,7 @@
             [self.promptLabel sizeToFit];
             self.promptLabel.center = CGPointMake(self.indicatorView.center.x,CGRectGetMaxY(self.indicatorView.frame) + 10 );
             [self addSubview:self.promptLabel];
-            break;
-        }
+        }break;
         case NetWorkLoadTypeImageAnimation: {
             if (!imageAnimationArray.count) {
                 return;
@@ -60,8 +57,7 @@
             self.imageView.animationImages = imageAnimationArray;
             self.imageView.center =  CGPointMake(self.frame.size.width * 0.5, self.frame.size.height * 0.5);
             [self addSubview:self.imageView];
-            break;
-        }
+        } break;
         case NetWorkLoadTypeImageAnimationAndPromptText: {
             if (!imageAnimationArray.count) {
                 return;
@@ -78,14 +74,12 @@
             [self.promptLabel sizeToFit];
             self.promptLabel.center = CGPointMake(self.imageView.center.x, CGRectGetMaxY(self.imageView.frame) + 10);
             [self addSubview:self.promptLabel];
-            
         } break;
         default: {
-            break;
-        }
+            
+        }break;
     }
 }
-
 /**
  *  懒加载网络加载UI
  *
@@ -100,13 +94,14 @@
         });
     }
     return _indicatorView;
-
 }
-
-
+/**
+ *  懒加载
+ *
+ *  @return 文字提示label
+ */
 - (UILabel *)promptLabel
 {
-    
     if (!_promptLabel) {
         self.promptLabel = ({
             UILabel *lable = [[UILabel alloc]init];
@@ -118,7 +113,6 @@
     }
     return _promptLabel;
 }
-
 /**
  *  懒加载
  *
@@ -152,8 +146,6 @@
 @implementation NetWorkChangeView
 @end
 
-
-
 @interface BaseViewController ()
 /**头部网络变化UI*/
 @property (nonatomic,strong) NetWorkChangeView  *netWorkChageView;
@@ -166,7 +158,13 @@
 @synthesize viewToBottom    = _viewToBottom;
 @synthesize isOpenNetListen = _isOpenNetListen;
 @synthesize netIsUse = _netIsUse;
+
 #pragma mark - lifecycle
+
+//内存移除
+- (void)dealloc
+{
+}
 //加载视图
 - (void)loadView
 {
@@ -389,6 +387,7 @@
         }
     }
 }
+
 #pragma mark - 适配条件 留个接口子类继承重写
 - (void)fitCondition
 {
@@ -400,7 +399,12 @@
     return _fitViewType;
     //TODO: 子类需要哪种就写哪种 默认是第一种
 }
+
 #pragma mark - 网络加载UI
+- (void)showLoadingUI
+{
+    [self showLoadingUIWithNetWorkLoadType:NetWorkLoadTypeDefault andImageAnimation:nil andPromptText:nil];
+}
 - (void)showLoadingUIWithNetWorkLoadType:(NetWorkLoadType)netWorkLoadType
                        andImageAnimation:(NSArray *)imageAnimationArray
                            andPromptText:(NSString *)promptText
@@ -424,6 +428,7 @@
     }
     
 }
+/**留个接口子类自定义*/
 - (void)showCustomLoadingUI
 {
 }
@@ -442,6 +447,8 @@
         }];
     }
 }
+
+#pragma mark - 消息提示
 - (void)showPromptTextUIWithPromptText:(NSString *)promptText
                                  title:(NSString*)title
                            andDuration:(NSTimeInterval)interval
@@ -469,7 +476,7 @@
                                              otherButtonTitles:@"确定", nil];
     [alertView show];
 }
-#pragma mark - 打开网络监听
+#pragma mark - 打开网络监听or关闭网络监听
 - (void)setIsOpenNetListen:(BOOL)isOpenNetListen
 {   _isOpenNetListen = isOpenNetListen;
     if (_isOpenNetListen) {
@@ -477,41 +484,47 @@
                                              selector:@selector(reachabilityChanged:)
                                                  name:kReachabilityChangedNotification object:nil];
         AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [self netChange:appDelegate.reach];
-        
+        //在appDelegate中监测网络变化 刚打开应用时网络变化 self还没被实例化 因此收不到网络变化 必须强制 监测一下
+        //网络可用不显示 不可用显示
+        if ([appDelegate.reach currentReachabilityStatus] ==  NotReachable) {
+               [self netWorkChange:appDelegate.reach];
+        }
     }else{
+        //移除网络监听
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kReachabilityChangedNotification
                                                   object:nil];
+    
     }
 }
-
 - (void)reachabilityChanged:(NSNotification *)note
 {
     Reachability *curReach = [note object];
-    [self netChange:curReach];
+    [self netWorkChange:curReach];
 }
-- (void)netChange:(Reachability*)curReach
+- (void)netWorkChange:(Reachability*)curReach
 {
     switch ([curReach currentReachabilityStatus]) {
         case NotReachable:{
             [self.netWorkChageView setTitle:@"网络不可用,亲 ->点击设置网络连接!" forState:UIControlStateNormal];
             _netIsUse = NO;
+        }break;
+        case ReachableViaWiFi:{ //wifi he WWAN一样
         }
-            break;
-        case ReachableViaWiFi:{
-            
         case ReachableViaWWAN:{
             [self.netWorkChageView setTitle:@"网络已链接^^!" forState:UIControlStateNormal];
             //网络可用不用点击
             self.netWorkChageView.enabled = NO;
-            self.netWorkChageView.hidden= YES;
-            _netIsUse = NO;
-        }
-            break;
-        default:
-            break;
-        }
+            [UIView animateWithDuration:1.5f animations:^{
+                self.netWorkChageView.alpha = 0;
+            } completion:^(BOOL finished) {
+                self.netWorkChageView.hidden= YES;
+            }];
+            _netIsUse = YES;
+        }break;
+        default:{
+            
+        }break;
     }
 }
 /**网络变化UI*/
@@ -520,17 +533,14 @@
     if (!_netWorkChageView) {
         //判断当前的容器为导航控制器
         CGFloat start_Y = 64;
-        BOOL currentContainer_Nav = YES;
         if (self.navigationController) {
             //导航控制器隐藏
             if (self.navigationController.isNavigationBarHidden) {
                 start_Y = 20;
             }
             //当前的容器不是导航控制器
-            
         }else{
             start_Y = 20;
-            currentContainer_Nav = NO;
         }
         self.netWorkChageView = ({
             NetWorkChangeView *changeView = [NetWorkChangeView buttonWithType:UIButtonTypeCustom];
@@ -544,12 +554,8 @@
                  forControlEvents:UIControlEventTouchUpInside];
             [changeView setTitleColor:[UIColor redColor]
                              forState:UIControlStateNormal];
-            if (currentContainer_Nav) {
-                [self.navigationController.view addSubview:changeView];
-            }else{
-                [self.view addSubview:changeView];
-                [self.view bringSubviewToFront:changeView];
-            }
+            [self.view addSubview:changeView];
+            [self.view bringSubviewToFront:changeView];
             changeView;
         });
     }
@@ -557,7 +563,6 @@
     _netWorkChageView.hidden =  NO;
     _netWorkChageView.enabled = YES;
     return _netWorkChageView;
-
 }
 /**网络加载UI*/
 - (NetWorkLoadIngView *)netWorkLoadIngView
