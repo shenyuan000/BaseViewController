@@ -30,7 +30,7 @@ typedef NS_ENUM(NSUInteger,NetWorkLoadType) {
 /**当前的网络加载UI*/
 @property (nonatomic, assign) NetWorkLoadType         netWorkLoadType;
 //加载时文字提示
-@property (nonatomic, strong) UILabel *promptLabel;
+@property (nonatomic, strong) UILabel                 *promptLabel;
 @end
 
 /**
@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, FitViewType){
 /**哪种适配方式,子类重写,默认是第一种*/
 @property (nonatomic, assign) FitViewType  fitViewType;
 /**标示当前有没有网络,每次请求接口时都要判断当期网络是否可用*/
+/**只有开启了网络监听此变量才有效*/
 @property (nonatomic, assign,readonly) BOOL netIsUse;
 /**适配条件 留个接口子类继承重写*/
 - (void)fitCondition;//填充适配的条件eg:导航条是否隐藏,导航条是否透明 tabBar是否隐藏

@@ -494,7 +494,10 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:kReachabilityChangedNotification
                                                   object:nil];
-    
+        if (!_netWorkChageView) {
+            [_netWorkChageView removeFromSuperview];
+            _netWorkChageView = nil;
+        }
     }
 }
 - (void)reachabilityChanged:(NSNotification *)note
